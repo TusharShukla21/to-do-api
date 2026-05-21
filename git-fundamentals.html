@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Git in Pictures</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0c12;
+    --surface: #141823;
+    --border: #232839;
+    --text: #f1f5f9;
+    --muted: #7e8aa3;
+    --accent: #a78bfa;
+    --green: #4ade80;
+    --yellow: #fbbf24;
+    --red: #f87171;
+    --blue: #60a5fa;
+    --orange: #fb923c;
+  }
+  body {
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  /* HERO */
+  .hero { text-align: center; padding: 24px 0 56px; }
+  .hero h1 { font-size: 48px; font-weight: 800; letter-spacing: -1.5px; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { color: var(--muted); margin-top: 8px; font-size: 16px; }
+
+  /* CHAPTER */
+  .chapter { margin: 64px 0; }
+  .chapter-num {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 16px; }
+  h3 { font-size: 16px; font-weight: 600; margin: 24px 0 10px; color: var(--text); }
+  p { color: var(--muted); font-size: 15px; margin-bottom: 12px; }
+
+  /* THE BIG ONE-LINE */
+  .punch {
+    background: linear-gradient(135deg, rgba(167,139,250,0.08), rgba(96,165,250,0.08));
+    border: 1px solid rgba(167,139,250,0.25);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin: 20px 0;
+    font-size: 17px;
+    color: var(--text);
+  }
+  .punch strong { color: var(--accent); }
+
+  /* SPLIT VIEW */
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .split-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .split-card.lit-git { border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.04); }
+  .split-card.lit-hub { border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.04); }
+  .split-card .label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+  }
+  .lit-git .label { color: var(--green); }
+  .lit-hub .label { color: var(--accent); }
+  .split-card h4 { font-size: 22px; font-weight: 700; margin-bottom: 14px; }
+  .split-card ul { list-style: none; padding: 0; }
+  .split-card li { color: var(--muted); font-size: 14px; padding: 4px 0; }
+  .split-card li::before { content: '— '; color: var(--border); }
+
+  /* THE FLOW (animated 3-zones) */
+  .flow {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr 60px 1fr;
+    align-items: center;
+    gap: 0;
+    margin: 24px 0;
+  }
+  .zone {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .zone .icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 20px;
+    border: 2px solid var(--border);
+  }
+  .zone.z1 .icon { border-color: var(--yellow); color: var(--yellow); }
+  .zone.z2 .icon { border-color: var(--orange); color: var(--orange); }
+  .zone.z3 .icon { border-color: var(--green); color: var(--green); }
+  .zone h5 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .zone .desc { font-size: 11px; color: var(--muted); }
+  .zone.z1 h5 { color: var(--yellow); }
+  .zone.z2 h5 { color: var(--orange); }
+  .zone.z3 h5 { color: var(--green); }
+  .arrow {
+    text-align: center;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .arrow .line {
+    display: block;
+    font-size: 20px;
+    color: var(--border);
+    line-height: 1;
+    margin: 2px 0;
+  }
+
+  /* STORY GRID (the daily loop) */
+  .loop {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin: 20px 0;
+  }
+  .loop-step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
+    position: relative;
+  }
+  .loop-step .num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: rgba(167,139,250,0.15);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+  .loop-step code {
+    display: block;
+    font-family: 'Cascadia Code', monospace;
+    font-size: 11px;
+    color: var(--green);
+    margin: 4px 0;
+  }
+  .loop-step .why {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* COMMANDS */
+  pre {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-family: 'Cascadia Code', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 14px 0;
+  }
+  .c { color: var(--muted); }
+  .g { color: var(--green); }
+  .y { color: var(--yellow); }
+  .o { color: var(--orange); }
+
+  /* INLINE CODE */
+  code {
+    background: rgba(255,255,255,0.05);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-family: 'Cascadia Code', monospace;
+    font-size: 13px;
+    color: var(--green);
+  }
+
+  /* QUIZ */
+  .quiz {
+    background: rgba(167,139,250,0.05);
+    border: 1px solid rgba(167,139,250,0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 28px 0;
+  }
+  .quiz .label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .quiz details {
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 6px 0;
+    border: 1px solid var(--border);
+  }
+  .quiz summary {
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text);
+    list-style: none;
+  }
+  .quiz summary::before {
+    content: '? ';
+    color: var(--accent);
+    font-weight: 800;
+    margin-right: 4px;
+  }
+  .quiz details[open] summary::before { color: var(--green); content: '✓ '; }
+  .quiz details p {
+    margin: 8px 0 0;
+    font-size: 13px;
+    color: var(--green);
+  }
+
+  /* TINY NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    background: rgba(10,12,18,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    gap: 18px;
+    z-index: 10;
+    overflow-x: auto;
+  }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  nav a:hover { color: var(--text); }
+
+  /* CHEATSHEET */
+  .sheet {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .cmd-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+  }
+  .cmd-row code { background: none; padding: 0; font-size: 12px; }
+  .cmd-row .desc { color: var(--muted); font-size: 11px; margin-top: 3px; }
+
+  @media (max-width: 720px) {
+    .split, .flow, .loop, .sheet { grid-template-columns: 1fr; }
+    .arrow { transform: rotate(90deg); padding: 8px 0; }
+    .loop { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#why">Why Git</a>
+  <a href="#vs">Git vs GitHub</a>
+  <a href="#flow">The 3 Zones</a>
+  <a href="#loop">Daily Loop</a>
+  <a href="#branches">Branches</a>
+  <a href="#cheats">Cheatsheet</a>
+</nav>
+
+<div class="wrap">
+
+  <div class="hero">
+    <h1>Git in <span>Pictures</span></h1>
+    <p>The mental model first. Commands later.</p>
+  </div>
+
+  <!-- WHY -->
+  <section class="chapter" id="why">
+    <div class="chapter-num">CHAPTER 01</div>
+    <h2>Why does Git exist?</h2>
+
+    <p>Before Git, saving versions of code looked like this:</p>
+
+    <pre><span class="c"># your folder, in 2003</span>
+app.py
+app_v2.py
+app_v2_FINAL.py
+app_v2_FINAL_real.py
+app_DONT_DELETE.py    <span class="c"># which one is real?</span></pre>
+
+    <div class="punch">
+      Git is a <strong>time machine</strong> for your code. Every save becomes a labelled checkpoint you can jump back to — forever.
+    </div>
+  </section>
+
+  <!-- GIT VS GITHUB -->
+  <section class="chapter" id="vs">
+    <div class="chapter-num">CHAPTER 02</div>
+    <h2>Git vs GitHub</h2>
+    <p>Two completely different things. Don't confuse them.</p>
+
+    <div class="split">
+      <div class="split-card lit-git">
+        <div class="label">TOOL</div>
+        <h4>Git</h4>
+        <ul>
+          <li>Lives on your laptop</li>
+          <li>Works offline</li>
+          <li>Tracks your changes</li>
+          <li>You type commands</li>
+        </ul>
+      </div>
+      <div class="split-card lit-hub">
+        <div class="label">WEBSITE</div>
+        <h4>GitHub</h4>
+        <ul>
+          <li>Lives on the internet</li>
+          <li>Needs Wi-Fi</li>
+          <li>Stores Git projects</li>
+          <li>You click buttons</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="punch">
+      Git is the <strong>engine</strong>. GitHub is the <strong>garage</strong>. Engine runs fine without the garage — but the garage is where you store, share, and let others see it.
+    </div>
+  </section>
+
+  <!-- THREE ZONES -->
+  <section class="chapter" id="flow">
+    <div class="chapter-num">CHAPTER 03</div>
+    <h2>The 3 Zones</h2>
+    <p>Every file in Git lives in one of three zones. Learn this and every command makes sense.</p>
+
+    <div class="flow">
+      <div class="zone z1">
+        <div class="icon">✎</div>
+        <h5>Working</h5>
+        <div class="desc">you edit here</div>
+      </div>
+      <div class="arrow">
+        <span class="line">→</span>
+        <code style="background:none;padding:0;font-size:10px">git add</code>
+      </div>
+      <div class="zone z2">
+        <div class="icon">☐</div>
+        <h5>Staging</h5>
+        <div class="desc">ready to save</div>
+      </div>
+      <div class="arrow">
+        <span class="line">→</span>
+        <code style="background:none;padding:0;font-size:10px">git commit</code>
+      </div>
+      <div class="zone z3">
+        <div class="icon">●</div>
+        <h5>Repository</h5>
+        <div class="desc">saved forever</div>
+      </div>
+    </div>
+
+    <div class="punch">
+      You <strong>edit</strong> a file → you <strong>stage</strong> it (pick what to save) → you <strong>commit</strong> (take the snapshot). That's it. That's Git.
+    </div>
+  </section>
+
+  <!-- DAILY LOOP -->
+  <section class="chapter" id="loop">
+    <div class="chapter-num">CHAPTER 04</div>
+    <h2>Your Daily Loop</h2>
+    <p>5 commands. You will use these every single day.</p>
+
+    <div class="loop">
+      <div class="loop-step">
+        <div class="num">1</div>
+        <code>git status</code>
+        <div class="why">what changed?</div>
+      </div>
+      <div class="loop-step">
+        <div class="num">2</div>
+        <code>git add .</code>
+        <div class="why">stage all changes</div>
+      </div>
+      <div class="loop-step">
+        <div class="num">3</div>
+        <code>git commit -m</code>
+        <div class="why">save snapshot</div>
+      </div>
+      <div class="loop-step">
+        <div class="num">4</div>
+        <code>git push</code>
+        <div class="why">send to GitHub</div>
+      </div>
+      <div class="loop-step">
+        <div class="num">5</div>
+        <code>git pull</code>
+        <div class="why">get latest</div>
+      </div>
+    </div>
+
+    <pre><span class="c"># a real session looks like this:</span>
+<span class="g">git status</span>                    <span class="c"># see what's changed</span>
+<span class="g">git add</span> <span class="o">main.py</span>              <span class="c"># stage that file</span>
+<span class="g">git commit</span> <span class="y">-m</span> <span class="o">"fix login bug"</span>
+<span class="g">git push</span>                      <span class="c"># share it</span></pre>
+  </section>
+
+  <!-- BRANCHES -->
+  <section class="chapter" id="branches">
+    <div class="chapter-num">CHAPTER 05</div>
+    <h2>Branches</h2>
+    <p>A branch is a parallel copy of your project where you can experiment safely.</p>
+
+    <svg viewBox="0 0 600 140" style="width:100%; max-width:600px; display:block; margin:16px auto">
+      <line x1="40" y1="50" x2="560" y2="50" stroke="#232839" stroke-width="2"/>
+      <path d="M 180 50 Q 210 50 230 95 L 420 95 Q 450 95 470 50" stroke="#a78bfa" stroke-width="2" fill="none" stroke-dasharray="4,4"/>
+      <circle cx="80" cy="50" r="9" fill="#0a0c12" stroke="#4ade80" stroke-width="2"/>
+      <circle cx="180" cy="50" r="9" fill="#0a0c12" stroke="#4ade80" stroke-width="2"/>
+      <circle cx="320" cy="50" r="9" fill="#0a0c12" stroke="#4ade80" stroke-width="2"/>
+      <circle cx="470" cy="50" r="9" fill="#0a0c12" stroke="#4ade80" stroke-width="2"/>
+      <circle cx="540" cy="50" r="9" fill="#0a0c12" stroke="#60a5fa" stroke-width="2.5"/>
+      <circle cx="280" cy="95" r="9" fill="#0a0c12" stroke="#a78bfa" stroke-width="2"/>
+      <circle cx="380" cy="95" r="9" fill="#0a0c12" stroke="#a78bfa" stroke-width="2"/>
+      <text x="20" y="55" fill="#4ade80" font-size="11" font-weight="700" font-family="monospace">main</text>
+      <text x="225" y="115" fill="#a78bfa" font-size="11" font-weight="700" font-family="monospace">feature</text>
+      <text x="540" y="35" fill="#60a5fa" font-size="10" text-anchor="middle" font-family="monospace">HEAD</text>
+    </svg>
+
+    <div class="punch">
+      <strong>main</strong> = the real, working project. <strong>feature branches</strong> = where you try new things. Merge back into main only when it works.
+    </div>
+
+    <pre><span class="g">git switch</span> <span class="y">-c</span> <span class="o">feature/login</span>   <span class="c"># create + switch</span>
+<span class="c"># ...write code, commit...</span>
+<span class="g">git switch</span> <span class="o">main</span>                <span class="c"># go back to main</span>
+<span class="g">git merge</span> <span class="o">feature/login</span>        <span class="c"># bring changes in</span></pre>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="chapter">
+    <div class="chapter-num">CHECKPOINT</div>
+    <h2>Test yourself</h2>
+
+    <div class="quiz">
+      <div class="label">CLICK TO REVEAL</div>
+      <details>
+        <summary>Internet is off. Can I still commit?</summary>
+        <p>Yes. Commits are local. You only need internet for <code>push</code> and <code>pull</code>.</p>
+      </details>
+      <details>
+        <summary>What's the difference between <code>git add</code> and <code>git commit</code>?</summary>
+        <p><code>add</code> picks which changes to include. <code>commit</code> actually saves them as a snapshot.</p>
+      </details>
+      <details>
+        <summary>I deleted a file by mistake. Is it gone forever?</summary>
+        <p>No. If it was committed before, you can restore it with <code>git restore filename</code>. Git remembers everything.</p>
+      </details>
+      <details>
+        <summary>Why use a branch instead of editing main directly?</summary>
+        <p>Branches isolate risk. If your experiment fails, you throw the branch away and main stays clean.</p>
+      </details>
+      <details>
+        <summary>What does <code>git push</code> do?</summary>
+        <p>Uploads your committed snapshots from your laptop to GitHub.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- CHEATSHEET -->
+  <section class="chapter" id="cheats">
+    <div class="chapter-num">REFERENCE</div>
+    <h2>Cheatsheet</h2>
+
+    <h3>Setup (do once)</h3>
+    <div class="sheet">
+      <div class="cmd-row"><code>git config --global user.name "You"</code><div class="desc">your name on commits</div></div>
+      <div class="cmd-row"><code>git config --global user.email "you@x.com"</code><div class="desc">your email on commits</div></div>
+      <div class="cmd-row"><code>git init</code><div class="desc">turn folder into repo</div></div>
+      <div class="cmd-row"><code>git clone &lt;url&gt;</code><div class="desc">download a repo</div></div>
+    </div>
+
+    <h3>Every day</h3>
+    <div class="sheet">
+      <div class="cmd-row"><code>git status</code><div class="desc">what's changed?</div></div>
+      <div class="cmd-row"><code>git diff</code><div class="desc">show changes in detail</div></div>
+      <div class="cmd-row"><code>git add .</code><div class="desc">stage all changes</div></div>
+      <div class="cmd-row"><code>git commit -m "msg"</code><div class="desc">save snapshot</div></div>
+      <div class="cmd-row"><code>git push</code><div class="desc">upload to GitHub</div></div>
+      <div class="cmd-row"><code>git pull</code><div class="desc">download from GitHub</div></div>
+      <div class="cmd-row"><code>git log --oneline</code><div class="desc">see commit history</div></div>
+      <div class="cmd-row"><code>git restore filename</code><div class="desc">undo file changes</div></div>
+    </div>
+
+    <h3>Branches</h3>
+    <div class="sheet">
+      <div class="cmd-row"><code>git branch</code><div class="desc">list branches</div></div>
+      <div class="cmd-row"><code>git switch -c name</code><div class="desc">create + switch</div></div>
+      <div class="cmd-row"><code>git switch main</code><div class="desc">go to main</div></div>
+      <div class="cmd-row"><code>git merge name</code><div class="desc">merge a branch in</div></div>
+    </div>
+  </section>
+
+  <div style="text-align:center; color:var(--muted); font-size:12px; margin-top:64px">
+    Read this, then go practice. Reading alone won't make Git stick — typing the commands will.
+  </div>
+
+</div>
+</body>
+</html>
